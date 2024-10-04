@@ -8,6 +8,7 @@ import { getTwoFactorConfirmationByUserID } from "./data/two-factor-confirmation
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  debug: process.env.NODE_ENV === "development",
   session: { strategy: "jwt" },
   ...authConfig,
   pages: {
