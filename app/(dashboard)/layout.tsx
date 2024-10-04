@@ -22,7 +22,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
       />
       <ModalProvider />
       <Header />
-      {children}
+      <div className="px-4 lg:px-14">{children}</div>
     </div>
   );
 };

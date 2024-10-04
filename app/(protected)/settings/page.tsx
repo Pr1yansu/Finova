@@ -4,7 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { SettingsSchema } from "@/schemas";
 import React, { useEffect, useTransition } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { LuSettings } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { settings } from "@/actions/settings";
@@ -24,6 +29,7 @@ import FormError from "@/components/form-error";
 import FormSuccess from "@/components/form-success";
 import { Switch } from "@/components/ui/switch";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 const Settings = () => {
   const user = useCurrentUser();
@@ -202,6 +208,22 @@ const Settings = () => {
           </form>
         </Form>
       </CardContent>
+      <CardFooter>
+        <div className="flex flex-col items-center justify-center space-y-2 text-sm text-gray-500 w-full">
+          <div>
+            Go back to{" "}
+            <Link
+              href="/"
+              className="text-blue-500 font-semibold hover:underline text-base"
+            >
+              Dashboard
+            </Link>
+          </div>
+          <div className="flex items-center justify-center text-sm text-gray-500">
+            © 2021 All rights reserved.
+          </div>
+        </div>
+      </CardFooter>
     </Card>
   );
 };

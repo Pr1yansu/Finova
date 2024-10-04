@@ -21,7 +21,7 @@ const Dashboard = async ({
   });
 
   return (
-    <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24 max-2xl:px-10">
+    <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <DataGrid data={data} />
       <DataCharts data={data} />
     </div>

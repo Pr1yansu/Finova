@@ -17,7 +17,7 @@ const Categories = async ({ searchParams }: Props) => {
     searchParams.search || ""
   );
   return (
-    <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24 px-5 lg:px-10">
+    <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
         <CardHeader className="flex md:flex-row gap-y-2 md:items-center md:justify-between">
           <CardTitle className="line-clamp-1 text-xl">Categories</CardTitle>

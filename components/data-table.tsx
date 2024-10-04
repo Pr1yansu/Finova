@@ -97,7 +97,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <ConfirmDialog />
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 flex justify-between flex-wrap gap-2">
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
