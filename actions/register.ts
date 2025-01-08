@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { RegisterSchema } from "@/schemas";
 import bcrypt from "bcryptjs";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import VerificationEmail from "@/templates/email-verification-token";

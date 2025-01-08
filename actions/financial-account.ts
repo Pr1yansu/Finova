@@ -1,7 +1,7 @@
 "use server";
 import { z } from "zod";
 import { currentUser } from "@/lib/auth";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { financialSchema } from "@/schemas/finance";
 
 export const createFinancialAccount = async (

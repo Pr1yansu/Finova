@@ -1,6 +1,6 @@
 "use server";
 import { currentUser } from "@/lib/auth";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { parse, differenceInDays, subDays } from "date-fns";
 import { calculatePercentageChange, fillMissingDays } from "@/lib/utils";
 import { getColorForCategory } from "@/lib/utils";

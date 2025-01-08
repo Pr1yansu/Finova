@@ -15,7 +15,7 @@ import {
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 import { getTwoFactorConfirmationByUserID } from "@/data/two-factor-confirmation";
 import OtpEmail from "@/templates/two-factor-email";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,

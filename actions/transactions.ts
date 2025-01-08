@@ -1,7 +1,7 @@
 "use server";
 import { z } from "zod";
 import { currentUser } from "@/lib/auth";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { transactionSchema, updateTransactionSchema } from "@/schemas/finance";
 import { parseISO, subDays } from "date-fns";
 import { getFinancialAccountById } from "./financial-account";

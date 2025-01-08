@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { getVerificationTokenByEmail } from "@/data/verification-token";
 import { getPasswordResetTokenByEmail } from "@/data/password-reset-token";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";

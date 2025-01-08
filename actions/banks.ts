@@ -1,6 +1,6 @@
 "use server";
 import { plaidClient } from "@/lib/plaid";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { getUserById } from "@/data/user";
 import { format } from "date-fns";
 import { PlaidError } from "plaid";
