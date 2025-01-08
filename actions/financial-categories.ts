@@ -90,15 +90,6 @@ export const getFinancialCategories = async (search: string) => {
     FinancialCategories = await prisma.financialCategory.findMany({
       where: {
         userId: existingUser.id,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  } else {
-    FinancialCategories = await prisma.financialCategory.findMany({
-      where: {
-        userId: existingUser.id,
         OR: [
           {
             name: {
@@ -119,6 +110,15 @@ export const getFinancialCategories = async (search: string) => {
             },
           },
         ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } else {
+    FinancialCategories = await prisma.financialCategory.findMany({
+      where: {
+        userId: existingUser.id,
       },
       orderBy: {
         createdAt: "desc",
