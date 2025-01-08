@@ -3,6 +3,7 @@ import { z } from "zod";
 import { currentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { financialSchema } from "@/schemas/finance";
+import { FinancialCategory } from "@prisma/client";
 
 export const createFinancialCategory = async (
   data: z.infer<typeof financialSchema>
@@ -83,34 +84,47 @@ export const getFinancialCategories = async (search: string) => {
     };
   }
 
-  const FinancialCategories = await prisma.financialCategory.findMany({
-    where: {
-      userId: existingUser.id,
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: "insensitive",
+  let FinancialCategories: FinancialCategory[] = [];
+
+  if (search.length > 0) {
+    FinancialCategories = await prisma.financialCategory.findMany({
+      where: {
+        userId: existingUser.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } else {
+    FinancialCategories = await prisma.financialCategory.findMany({
+      where: {
+        userId: existingUser.id,
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          plaidId: {
-            contains: search,
-            mode: "insensitive",
+          {
+            plaidId: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          id: {
-            contains: search,
-            mode: "insensitive",
+          {
+            id: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
-        },
-      ],
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
 
   return {
     data: FinancialCategories,

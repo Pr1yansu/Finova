@@ -3,6 +3,7 @@ import { z } from "zod";
 import { currentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { financialSchema } from "@/schemas/finance";
+import { FinancialAccount } from "@prisma/client";
 
 export const createFinancialAccount = async (
   data: z.infer<typeof financialSchema>
@@ -83,34 +84,44 @@ export const getFinancialAccounts = async (search: string) => {
     };
   }
 
-  const financialAccounts = await prisma.financialAccount.findMany({
-    where: {
-      userId: existingUser.id,
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: "insensitive",
+  let financialAccounts: FinancialAccount[] = [];
+
+  if (search.length > 0) {
+    financialAccounts = await prisma.financialAccount.findMany({
+      where: {
+        userId: existingUser.id,
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          plaidId: {
-            contains: search,
-            mode: "insensitive",
+          {
+            plaidId: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          id: {
-            contains: search,
-            mode: "insensitive",
+          {
+            id: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
-        },
-      ],
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } else {
+    financialAccounts = await prisma.financialAccount.findMany({
+      where: {
+        userId: existingUser.id,
+      },
+    });
+  }
 
   return {
     data: financialAccounts,
