@@ -21,7 +21,7 @@ import { PlusIcon } from "lucide-react";
 import { transactionSchema } from "@/schemas/finance";
 import { z } from "zod";
 import { useSelectAccount } from "@/hooks/use-select-account";
-import { LuLoader2 } from "react-icons/lu";
+import { LuLoader } from "react-icons/lu";
 import ScanSelect from "@/components/scan-select";
 import { useSubscriptionModal } from "@/hooks/use-subscription";
 
@@ -148,7 +148,7 @@ const ClientTable = ({
         {isPending && (
           <div className="absolute top-0 left-0 bottom-0 right-0 rounded-md flex justify-center items-center bg-black/70 z-50">
             <div className="relative">
-              <LuLoader2 className="m-auto size-8 text-white animate-spin mb-2" />
+              <LuLoader className="m-auto size-8 text-white animate-spin mb-2" />
               <p className="text-center text-white">Importing Please wait...</p>
             </div>
           </div>

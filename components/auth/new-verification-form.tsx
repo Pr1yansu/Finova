@@ -1,7 +1,7 @@
 "use client";
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import CardWrapper from "../wrappers/card-wrapper";
-import { LuLoader2 } from "react-icons/lu";
+import { LuLoader } from "react-icons/lu";
 import { useSearchParams } from "next/navigation";
 import { verifyEmail } from "@/actions/verification";
 import FormError from "../form-error";
@@ -49,7 +49,7 @@ const NewVerificationForm = () => {
     >
       {!error && !success && (
         <div className="flex items-center justify-center w-full">
-          <LuLoader2 className="text-primary-500 animate-spin h-16 w-16 text-muted-foreground" />
+          <LuLoader className="text-primary-500 animate-spin h-16 w-16 text-muted-foreground" />
         </div>
       )}
       <FormError message={error} />
