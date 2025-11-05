@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "name": "Demo User",
+      "email": "demo@finova.test",
+      "password": "demopassword",
+      "role": "USER",
+      "financialAccounts": [
+        { "name": "Checking", "plaidId": null },
+        { "name": "Savings", "plaidId": null }
+      ],
+      "categories": [{ "name": "Groceries" }, { "name": "Utilities" }],
+      "transactions": [
+        {
+          "amount": 5000,
+          "payee": "Grocery Store",
+          "notes": "Weekly groceries",
+          "date": "2025-10-10T00:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 0
+        },
+        {
+          "amount": -12000,
+          "payee": "Electric Co",
+          "notes": "Monthly bill",
+          "date": "2025-10-05T00:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 1
+        }
+      ]
+    },
+    {
+      "name": "Admin User",
+      "email": "admin@finova.test",
+      "password": "adminpassword",
+      "role": "ADMIN",
+      "financialAccounts": [{ "name": "Admin Account", "plaidId": null }],
+      "categories": [{ "name": "Salary" }],
+      "transactions": [
+        {
+          "amount": 800000,
+          "payee": "Employer",
+          "notes": "Payroll",
+          "date": "2025-10-01T00:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 0
+        }
+      ]
+    }
+  ]
+}
