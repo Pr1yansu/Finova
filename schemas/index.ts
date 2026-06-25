@@ -11,6 +11,8 @@ export const SettingsSchema = z
     ),
     password: z.optional(z.string().min(6)),
     newPassword: z.optional(z.string().min(6)),
+    defaultCurrency: z.optional(z.string()),
+    monthlyBudget: z.optional(z.coerce.number().min(0)),
   })
   .refine(
     (data) => {

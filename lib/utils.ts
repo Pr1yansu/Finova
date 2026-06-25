@@ -14,10 +14,10 @@ export const convertAmountToUnits = (amount: number) => {
   return amount / 1000;
 };
 
-export const formatCurrency = (amount: number) => {
+export const formatCurrency = (amount: number, currency = "INR") => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "INR",
+    currency: currency || "INR",
   }).format(amount);
 };
 

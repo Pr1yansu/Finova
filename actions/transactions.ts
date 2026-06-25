@@ -119,7 +119,7 @@ export const getTransactions = async ({
     };
   }
 
-  const startDate = from ? new Date(from) : subDays(new Date(), 30);
+  const startDate = from ? new Date(from) : new Date("1970-01-01");
 
   const endDate = to ? new Date(to) : new Date();
 

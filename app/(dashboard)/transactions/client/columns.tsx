@@ -21,6 +21,18 @@ interface Transaction extends Transactions {
   financialAccount: FinancialAccount;
 }
 
+import { useCurrentUser } from "@/hooks/use-current-user";
+
+const AmountCell = ({ amount }: { amount: number }) => {
+  const user = useCurrentUser();
+  const currency = user?.defaultCurrency || "INR";
+  return (
+    <Badge variant={amount > 0 ? "primary" : "destructive"}>
+      {formatCurrency(convertAmountToUnits(amount), currency)}
+    </Badge>
+  );
+};
+
 export const columns: ColumnDef<Transaction>[] = [
   {
     id: "select",
@@ -65,11 +77,7 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     header: "Amount",
     cell: ({ row }) => {
-      return (
-        <Badge variant={row.original.amount > 0 ? "primary" : "destructive"}>
-          {formatCurrency(convertAmountToUnits(row.original.amount))}
-        </Badge>
-      );
+      return <AmountCell amount={row.original.amount} />;
     },
   },
   {

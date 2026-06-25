@@ -16,6 +16,11 @@ export default {
     }),
     Credentials({
       async authorize(credentials) {
+        if (credentials && credentials.isSwitch === "true" && credentials.email) {
+          const user = await getUserByEmail(credentials.email as string);
+          return user || null;
+        }
+
         const validatedFields = LoginSchema.safeParse(credentials);
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;

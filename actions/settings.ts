@@ -9,6 +9,7 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { sendMail } from "@/lib/mails";
 import { render } from "@react-email/components";
 import VerificationEmail from "@/templates/email-verification-token";
+import { signIn } from "@/auth";
 
 type SettingsKeys = keyof z.infer<typeof SettingsSchema>;
 
@@ -28,6 +29,12 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
       return {
         error: "Unauthorized",
       };
+    }
+
+    // Handle monthly budget clearing or parsing
+    let monthlyBudgetValue: number | null | undefined = values.monthlyBudget;
+    if (monthlyBudgetValue === undefined || monthlyBudgetValue === null || Number.isNaN(monthlyBudgetValue)) {
+      monthlyBudgetValue = null;
     }
 
     Object.keys(values).forEach((key) => {
@@ -80,11 +87,22 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
       values.newPassword = undefined;
     }
 
+    // Prepare data to update
+    const updateData: any = {
+      ...values,
+      monthlyBudget: monthlyBudgetValue,
+    };
+
+    // Remove keys that are undefined to avoid overriding database fields
+    Object.keys(updateData).forEach((key) => {
+      if (updateData[key] === undefined) {
+        delete updateData[key];
+      }
+    });
+
     await prisma.user.update({
       where: { id: user.id },
-      data: {
-        ...values,
-      },
+      data: updateData,
     });
 
     return {
@@ -100,6 +118,83 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
     }
     return {
       error: "An error occurred",
+    };
+  }
+};
+
+export const getSwitchableAccounts = async () => {
+  try {
+    const user = await currentUser();
+    if (!user) {
+      return {
+        error: "Unauthorized",
+      };
+    }
+
+    const accounts = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        image: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
+
+    return {
+      data: accounts,
+    };
+  } catch (error) {
+    console.error("Failed to get switchable accounts:", error);
+    return {
+      error: "Failed to fetch switchable accounts",
+    };
+  }
+};
+
+export const switchAccount = async (email: string) => {
+  try {
+    const user = await currentUser();
+    if (!user) {
+      return {
+        error: "Unauthorized",
+      };
+    }
+
+    const targetUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!targetUser) {
+      return {
+        error: "User not found",
+      };
+    }
+
+    await signIn("credentials", {
+      email,
+      isSwitch: "true",
+      redirectTo: "/",
+    });
+
+    return {
+      success: "Switched account successfully",
+    };
+  } catch (error) {
+    // If it is a Next.js redirect error (which uses throw), let it propagate
+    if (
+      error instanceof Error &&
+      (error.message === "NEXT_REDIRECT" || error.constructor.name === "RedirectError")
+    ) {
+      throw error;
+    }
+    
+    console.error("Failed to switch account:", error);
+    return {
+      error: error instanceof Error ? error.message : "An error occurred during switching",
     };
   }
 };

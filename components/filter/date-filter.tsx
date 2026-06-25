@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { DateRange } from "react-day-picker";
-import { format, subDays } from "date-fns";
+import { format } from "date-fns";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { formatDateRange } from "@/lib/utils";
@@ -22,7 +22,7 @@ const DateFilter = () => {
   const to = params.get("to") || undefined;
 
   const defaultTo = new Date();
-  const defaultFrom = subDays(defaultTo, 30);
+  const defaultFrom = new Date("1970-01-01");
 
   const paramsState = {
     from: from ? new Date(from) : defaultFrom,
@@ -60,7 +60,7 @@ const DateFilter = () => {
         <Calendar
           initialFocus
           mode="range"
-          defaultMonth={date?.from}
+          defaultMonth={date?.from && date.from.getFullYear() > 1970 ? date.from : new Date()}
           selected={date}
           onSelect={(date) => {
             setDate(date);

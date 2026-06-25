@@ -50,6 +50,8 @@ interface DataCardProps extends BoxVariants, IconVariants {
   icon: IconType;
 }
 
+import { useCurrentUser } from "@/hooks/use-current-user";
+
 const DataCard = ({
   title,
   value = 0,
@@ -58,6 +60,10 @@ const DataCard = ({
   variant,
   icon: Icon,
 }: DataCardProps) => {
+  const user = useCurrentUser();
+  const currency = user?.defaultCurrency || "INR";
+  const currencyFormatter = (val: number) => formatCurrency(val, currency);
+
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between items-center gap-x-4">
@@ -78,7 +84,7 @@ const DataCard = ({
             start={0}
             end={value}
             decimals={2}
-            formattingFn={formatCurrency}
+            formattingFn={currencyFormatter}
           />
         </h1>
         <p

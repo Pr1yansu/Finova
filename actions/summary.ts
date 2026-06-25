@@ -88,11 +88,27 @@ export const getSummary = async (filters: filterFields) => {
   const { accountId, from, to } = filters;
 
   const defaultTo = new Date();
-  const defaultFrom = subDays(defaultTo, 30);
+  const defaultFrom = new Date("1970-01-01");
 
-  const startDate = from ? parse(from, "yyyy-MM-dd", new Date()) : defaultFrom;
-
+  let startDate = from ? parse(from, "yyyy-MM-dd", new Date()) : defaultFrom;
   const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
+
+  // Performance guard: if the start date is 1970-01-01 (All Time),
+  // dynamically resolve it to the oldest transaction's date to avoid generating 56 years of daily chart points.
+  if (startDate.getFullYear() <= 1970) {
+    const oldestTransaction = await prisma.transactions.findFirst({
+      where: {
+        financialAccount: {
+          userId: user.id as string,
+        },
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
+    // Fallback to 30 days ago if there are no transactions
+    startDate = oldestTransaction ? oldestTransaction.date : subDays(endDate, 30);
+  }
 
   const periodLength = differenceInDays(endDate, startDate) + 1;
 

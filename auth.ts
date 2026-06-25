@@ -72,6 +72,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.defaultCurrency = existingUser.defaultCurrency || "INR";
+      token.monthlyBudget = existingUser.monthlyBudget;
 
       return token;
     },
@@ -83,6 +85,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.email = token.email as string;
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
         session.user.isOAuth = token.isOAuth as boolean;
+        session.user.defaultCurrency = (token.defaultCurrency as string) || "INR";
+        session.user.monthlyBudget = token.monthlyBudget as number | null;
       }
       return session;
     },

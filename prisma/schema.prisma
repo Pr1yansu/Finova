@@ -24,6 +24,8 @@ model User {
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
   isTwoFactorEnabled    Boolean                 @default(false)
+  defaultCurrency       String                  @default("INR")
+  monthlyBudget         Int?
   TwoFactorConfirmation TwoFactorConfirmation[]
   FinancialAccount      FinancialAccount[]
   Premium               Premium[]
