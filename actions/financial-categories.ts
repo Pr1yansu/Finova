@@ -297,13 +297,7 @@ export const deletefinancialCategoryById = async (id: string) => {
 };
 
 export const getFinancialCategoriesByUserId = async (userId: string) => {
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-
-  if (!existingUser) {
+  if (!userId) {
     return {
       error: "User not found",
     };
@@ -311,7 +305,7 @@ export const getFinancialCategoriesByUserId = async (userId: string) => {
 
   const financialCategories = await prisma.financialCategory.findMany({
     where: {
-      userId: existingUser.id,
+      userId,
     },
   });
 
