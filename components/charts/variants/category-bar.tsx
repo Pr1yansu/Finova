@@ -42,10 +42,10 @@ const CategoryBar = ({ data }: CategoryBarProps) => {
       <BarChart
         data={formattedData}
         layout="vertical"
-        margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+        margin={{ top: 10, right: 25, left: 10, bottom: 10 }}
       >
         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-        <XAxis type="number" hide />
+        <XAxis type="number" hide domain={[0, "dataMax * 1.15"]} />
         <YAxis
           dataKey="name"
           type="category"
@@ -60,6 +60,7 @@ const CategoryBar = ({ data }: CategoryBarProps) => {
           ))}
         </Bar>
         <ChartTooltip
+          cursor={false}
           content={
             <ChartTooltipContent
               formatter={(val) => formatCurrency(Number(val), currency)}
