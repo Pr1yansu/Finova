@@ -84,9 +84,23 @@ const ImportCard = ({ data, onCancel, onSubmit }: ImportCardProps) => {
       return {
         ...row,
         amount: convertAmountToMiliUnits(parseFloat(row.amount)),
-        date: row.date
-          ? format(parse(row.date, dateFormat, new Date()), outputFormat)
-          : null,
+        date: (() => {
+          if (!row.date) return null;
+          let parsedDate = parse(row.date, dateFormat, new Date());
+          if (isNaN(parsedDate.getTime())) {
+            parsedDate = parse(row.date, "yyyy-MM-dd", new Date());
+          }
+          if (isNaN(parsedDate.getTime())) {
+            parsedDate = parse(row.date, "MM/dd/yyyy", new Date());
+          }
+          if (isNaN(parsedDate.getTime())) {
+            parsedDate = parse(row.date, "dd/MM/yyyy", new Date());
+          }
+          if (isNaN(parsedDate.getTime())) {
+            parsedDate = new Date(row.date);
+          }
+          return isNaN(parsedDate.getTime()) ? null : format(parsedDate, outputFormat);
+        })(),
       };
     });
 

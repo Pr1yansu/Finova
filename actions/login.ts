@@ -34,7 +34,9 @@ export const login = async (
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    throw new Error("Email does not exist!");
+    return {
+      error: "Email does not exist!",
+    };
   }
 
   if (!existingUser.emailVerified) {
@@ -43,7 +45,9 @@ export const login = async (
     );
 
     if (!verificationToken) {
-      throw new Error("Verification token not found!");
+      return {
+        error: "Verification token not found!",
+      };
     }
 
     const emailTemplate = await render(
@@ -64,7 +68,9 @@ export const login = async (
       const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
 
       if (!twoFactorToken) {
-        throw new Error("Two factor token not found!");
+        return {
+          error: "Two factor token not found!",
+        };
       }
 
       if (twoFactorToken.token !== code) {

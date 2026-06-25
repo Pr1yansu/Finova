@@ -48,7 +48,7 @@ export const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          className="p-0 h-0"
+          className="p-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Date

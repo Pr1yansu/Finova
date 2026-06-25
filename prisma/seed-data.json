@@ -12,7 +12,7 @@
       "categories": [{ "name": "Groceries" }, { "name": "Utilities" }],
       "transactions": [
         {
-          "amount": 5000,
+          "amount": -5000,
           "payee": "Grocery Store",
           "notes": "Weekly groceries",
           "date": "2025-10-10T00:00:00.000Z",

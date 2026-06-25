@@ -37,10 +37,10 @@ export default auth((req) => {
       callbackUrl += nextUrl.search;
     }
 
-    const exncodedCallbackUrl = encodeURIComponent(callbackUrl);
+    const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
     return NextResponse.redirect(
-      new URL(`/auth/login?callbackUrl=${exncodedCallbackUrl}`, nextUrl)
+      new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
 

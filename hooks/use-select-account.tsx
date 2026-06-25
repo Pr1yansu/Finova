@@ -112,7 +112,7 @@ export const useSelectAccount = (
             </Button>
             <Button
               onClick={() => handleConfirm(selectValue)}
-              variant={"destructive"}
+              variant="default"
             >
               Confirm
             </Button>

@@ -439,8 +439,8 @@ export const bulkCreateTransactions = async (
       amount,
       date: parseISO(date as unknown as string),
       payee,
-      categoryId,
-      notes,
+      categoryId: categoryId || null,
+      notes: notes || null,
       financialAccountId: accountId,
     };
   });

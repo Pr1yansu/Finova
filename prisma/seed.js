@@ -1,5 +1,25 @@
 const path = require("path");
 const fs = require("fs");
+
+// Load .env file manually into process.env
+const envPath = path.join(__dirname, "../.env");
+if (fs.existsSync(envPath)) {
+  const envConfig = fs.readFileSync(envPath, "utf-8");
+  envConfig.split("\n").forEach((line) => {
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+    if (match) {
+      const key = match[1];
+      let value = match[2] || "";
+      if (value.startsWith('"') && value.endsWith('"')) {
+        value = value.substring(1, value.length - 1);
+      } else if (value.startsWith("'") && value.endsWith("'")) {
+        value = value.substring(1, value.length - 1);
+      }
+      process.env[key] = value;
+    }
+  });
+}
+
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 
@@ -34,6 +54,7 @@ async function main() {
         email: u.email,
         password: passwordHash,
         role: u.role || "USER",
+        emailVerified: new Date(),
       },
     });
 

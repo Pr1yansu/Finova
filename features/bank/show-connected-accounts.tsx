@@ -27,7 +27,7 @@ const ShowConnectedAccountsSheet = () => {
     "You are about to import transactions from this Bank. "
   );
   const { isOpen, onClose } = useShowBanks();
-  const [data, setData] = useState<AccountBase[][]>([]);
+  const [data, setData] = useState<AccountBase[]>([]);
   const [accounts, setAccounts] = useState<FinancialAccount[]>([]);
   const [accountId, setAccountId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -109,8 +109,8 @@ const ShowConnectedAccountsSheet = () => {
                 }}
               >
                 <Landmark size={36} />
-                <p className="mt-2">{account[0].name}</p>
-                <p>{account[0].type}</p>
+                <p className="mt-2">{account.name}</p>
+                <p>{account.type}</p>
               </Button>
             ))}
           </div>

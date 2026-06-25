@@ -11,10 +11,14 @@ const NewVerificationForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const searchParams = useSearchParams();
+  const hasSubmitted = React.useRef(false);
 
   const token = searchParams.get("token");
 
   const onSubmit = useCallback(async () => {
+    if (hasSubmitted.current) return;
+    hasSubmitted.current = true;
+
     if (!token) {
       setError("Missing token!");
       return;

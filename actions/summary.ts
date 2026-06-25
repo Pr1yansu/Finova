@@ -142,13 +142,13 @@ export const getSummary = async (filters: filterFields) => {
         lte: endDate,
       },
       amount: {
-        gt: 0,
+        lt: 0,
       },
       ...(accountId && { financialAccountId: accountId }),
     },
     orderBy: {
       _sum: {
-        amount: "desc",
+        amount: "asc",
       },
     },
   });

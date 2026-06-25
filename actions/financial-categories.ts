@@ -163,7 +163,7 @@ export const bulkDeleteFinancialCategories = async (ids: string[]) => {
     });
 
     return {
-      success: "Categorys deleted successfully",
+      success: "Categories deleted successfully",
     };
   } catch (error) {
     if (error instanceof Error) {

@@ -44,7 +44,7 @@ export const getBankAccounts = async (userId: string, accountId: string) => {
   );
 
   return {
-    data: bankAccounts,
+    data: bankAccounts.flat(),
   };
 };
 
@@ -107,19 +107,34 @@ export const storeTransactionsFromPlaid = async (
       notes: transaction.name || "",
     }));
 
-    const uniqueTransactions = flattenedTransactions.filter(
+    // Filter duplicates within the new batch
+    const newUniqueTransactions = flattenedTransactions.filter(
       (value, index, self) =>
         index ===
         self.findIndex(
           (t) =>
             t.date.getTime() === value.date.getTime() &&
-            t.amount === value.amount
+            t.amount === value.amount &&
+            t.notes === value.notes
         )
     );
 
-    await prisma.transactions.createMany({
-      data: uniqueTransactions,
-    });
+    // Filter out transactions that already exist in the database
+    const transactionsToInsert = newUniqueTransactions.filter(
+      (value) =>
+        !existingTransactions.some(
+          (existing) =>
+            new Date(existing.date).getTime() === value.date.getTime() &&
+            existing.amount === value.amount &&
+            existing.notes === value.notes
+        )
+    );
+
+    if (transactionsToInsert.length > 0) {
+      await prisma.transactions.createMany({
+        data: transactionsToInsert,
+      });
+    }
 
     return { success: "Transactions stored" };
   } catch (error) {

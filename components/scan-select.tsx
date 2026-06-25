@@ -176,24 +176,30 @@ const ScanSelect = ({ onCancel, accounts }: ScanSelectProps) => {
               toast.error("Please extract text from the image first.");
               return;
             }
+
+            const finalAmount = amount ? amount : data?.amount;
+            const finalDate = data?.date;
+            const finalNotes = notes ? notes : data?.notes;
+            const finalPayee = payee ? payee : data?.payee;
+
             setData({
-              amount: amount ? amount : data?.amount,
-              date: data?.date,
-              notes: notes ? notes : data?.notes,
-              payee: payee ? payee : data?.payee,
+              amount: finalAmount,
+              date: finalDate,
+              notes: finalNotes,
+              payee: finalPayee,
             });
 
-            if (data.date === null) {
+            if (!finalDate) {
               toast.error("Please enter a date.");
               return;
             }
 
-            if (data.payee === null) {
+            if (!finalPayee) {
               toast.error("Please enter a payee.");
               return;
             }
 
-            if (data.amount === null) {
+            if (!finalAmount) {
               toast.error("Please enter an amount.");
               return;
             }
@@ -208,10 +214,10 @@ const ScanSelect = ({ onCancel, accounts }: ScanSelectProps) => {
             setLoading(true);
 
             createTransaction({
-              amount: convertAmountToMiliUnits(parseInt(data.amount)),
-              date: new Date(data.date),
-              payee: data.payee,
-              notes: data.notes,
+              amount: convertAmountToMiliUnits(parseInt(finalAmount)),
+              date: new Date(finalDate),
+              payee: finalPayee,
+              notes: finalNotes,
               accountId: accountId,
             })
               .then((res) => {
