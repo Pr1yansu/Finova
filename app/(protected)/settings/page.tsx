@@ -8,9 +8,7 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
 } from "@/components/ui/card";
-import { LuSettings } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { settings } from "@/actions/settings";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -83,64 +81,76 @@ const Settings = () => {
   };
 
   return (
-    <Card className="max-w-[460px] w-full">
-      <CardHeader>
-        <p className="flex items-center space-x-2 text-lg gap-2 justify-center font-bold">
-          <LuSettings className="h-6 w-6" />
-          Settings
-        </p>
-      </CardHeader>
-      <CardContent>
+    <Card className="max-w-[480px] w-full border-none shadow-2xl rounded-2xl overflow-hidden bg-white/95 backdrop-blur-md">
+      {/* Premium Profile Header Block */}
+      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-8 text-white flex flex-col items-center text-center relative">
+        <div className="size-20 rounded-full bg-white/10 backdrop-blur-md border-4 border-white/30 flex items-center justify-center text-3xl font-extrabold text-white shadow-xl mb-3 hover:scale-105 transition duration-300 select-none">
+          {user?.name?.charAt(0).toUpperCase() || "U"}
+        </div>
+        <h2 className="text-2xl font-bold tracking-tight font-montserrat">{user?.name || "User Profile"}</h2>
+        <p className="text-xs text-blue-200/90 font-medium mt-0.5">{user?.email}</p>
+        {user?.isOAuth && (
+          <span className="mt-3 px-2.5 py-1 text-[10px] font-semibold bg-white/20 text-white rounded-full uppercase tracking-wider">
+            Social Account
+          </span>
+        )}
+      </div>
+
+      <CardContent className="p-6 pt-8">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Full Name</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isPending} type="text" />
+                    <Input {...field} disabled={isPending} type="text" className="h-10 border-gray-200 focus-visible:ring-blue-500 rounded-lg bg-white" />
                   </FormControl>
                   {user?.isOAuth && (
-                    <FormDescription>
-                      Other fields are disabled for Social login users
+                    <FormDescription className="text-[11px] text-gray-400">
+                      Profile details are managed by your social provider.
                     </FormDescription>
                   )}
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
+
             {user?.isOAuth ? null : (
               <>
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
+                    <FormItem className="space-y-1.5">
+                      <FormLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Email Address</FormLabel>
                       <FormControl>
-                        <Input {...field} disabled={isPending} type="email" />
+                        <Input {...field} disabled={isPending} type="email" className="h-10 border-gray-200 focus-visible:ring-blue-500 rounded-lg bg-white" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
-                <div className="grid grid-cols-2 gap-2">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
+                      <FormItem className="space-y-1.5">
+                        <FormLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Current Password</FormLabel>
                         <FormControl>
                           <Input
                             {...field}
                             disabled={isPending}
                             type="password"
+                            placeholder="••••••••"
+                            className="h-10 border-gray-200 focus-visible:ring-blue-500 rounded-lg bg-white"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
@@ -148,32 +158,35 @@ const Settings = () => {
                     control={form.control}
                     name="newPassword"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>New Password</FormLabel>
+                      <FormItem className="space-y-1.5">
+                        <FormLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider">New Password</FormLabel>
                         <FormControl>
                           <Input
                             {...field}
                             disabled={isPending}
                             type="password"
+                            placeholder="••••••••"
+                            className="h-10 border-gray-200 focus-visible:ring-blue-500 rounded-lg bg-white"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
                 </div>
               </>
             )}
+
             {user?.isOAuth ? null : (
               <FormField
                 control={form.control}
                 name="isTwoFactorEnabled"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2 px-3 shadow-sm">
+                  <FormItem className="flex flex-row items-center justify-between rounded-xl border border-gray-100 bg-gray-50/50 p-4 shadow-sm">
                     <div className="space-y-0.5">
-                      <FormLabel>Two-factor authentication</FormLabel>
-                      <FormDescription>
-                        Enable two-factor authentication for your account
+                      <FormLabel className="text-sm font-semibold text-gray-800">Two-Factor Auth</FormLabel>
+                      <FormDescription className="text-xs text-gray-500 leading-normal max-w-[260px]">
+                        Secure your account by requiring an email OTP code on login.
                       </FormDescription>
                     </div>
                     <FormControl>
@@ -181,56 +194,63 @@ const Settings = () => {
                         disabled={isPending}
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="data-[state=checked]:bg-blue-600"
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
             )}
+
             <FormError message={error} />
             <FormSuccess message={success} />
-            <div className="flex items-center justify-end gap-2 pt-2">
+
+            <div className="flex items-center justify-between gap-3 pt-4 border-t border-gray-100">
               <Button
                 type="button"
                 disabled={isPending}
-                variant="destructive"
+                variant="outline"
                 onClick={async () => {
                   await signOut();
                 }}
+                className="w-1/2 h-10 rounded-lg border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 transition font-medium"
               >
                 Sign out
               </Button>
-              <Button type="submit" variant="default" disabled={isPending}>
-                Submit
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="w-1/2 h-10 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-md hover:shadow-lg transition duration-200 border-none"
+              >
+                Save Changes
               </Button>
             </div>
           </form>
         </Form>
       </CardContent>
-      <CardFooter>
-        <div className="flex flex-col items-center justify-center space-y-3 text-sm text-gray-500 w-full">
-          <div>
-            Go back to{" "}
-            <Link
-              href="/"
-              className="text-blue-500 font-semibold hover:underline text-base"
-            >
-              Dashboard
-            </Link>
-          </div>
-          <div className="flex gap-x-4 text-xs font-medium text-gray-400">
-            <Link href="/faq" className="hover:underline hover:text-blue-500">
-              FAQ
-            </Link>
-            <span>•</span>
-            <Link href="/terms" className="hover:underline hover:text-blue-500">
-              Terms & Conditions
-            </Link>
-          </div>
-          <div className="flex items-center justify-center text-xs text-gray-400">
-            © 2026 Finova. All rights reserved.
-          </div>
+
+      <CardFooter className="p-6 bg-gray-50/50 border-t border-gray-100 flex flex-col items-center space-y-4">
+        <div>
+          Go back to{" "}
+          <Link
+            href="/"
+            className="text-blue-600 font-semibold hover:text-blue-700 hover:underline text-sm transition"
+          >
+            Dashboard
+          </Link>
+        </div>
+        <div className="flex gap-x-4 text-[11px] font-semibold text-gray-400">
+          <Link href="/faq" className="hover:text-blue-600 transition">
+            FAQ
+          </Link>
+          <span>•</span>
+          <Link href="/terms" className="hover:text-blue-600 transition">
+            Terms & Conditions
+          </Link>
+        </div>
+        <div className="text-[10px] text-gray-400 font-medium">
+          © 2026 Finova. All rights reserved.
         </div>
       </CardFooter>
     </Card>
