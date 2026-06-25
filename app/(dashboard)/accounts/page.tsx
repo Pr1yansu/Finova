@@ -9,6 +9,7 @@ import { Search } from "lucide-react";
 import ShowAllBankAccountsBtn from "./client/show-all-bank-accounts";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "@/data/user";
+import DemoSeederBanner from "@/components/summary/demo-seeder-banner";
 
 interface Props {
   searchParams: {
@@ -32,8 +33,15 @@ const Accounts = async ({ searchParams }: Props) => {
   const dbUser = await getUserById(user?.id as string);
 
   const { data, error } = await getFinancialAccounts(searchParams.search || "");
+  const isEmpty = !searchParams.search && (!data || data.length === 0);
+
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
+      <DemoSeederBanner
+        isEmpty={isEmpty}
+        title="Welcome to your Accounts!"
+        description="It looks like you don't have any financial accounts yet. Get started instantly by populating your profile with checking and savings accounts, standard categories, and a rich set of transactions."
+      />
       <Card className="border-none drop-shadow-sm">
         <CardHeader className="flex md:flex-row gap-y-2 md:items-center md:justify-between">
           <CardTitle className="line-clamp-1 text-xl">Accounts</CardTitle>

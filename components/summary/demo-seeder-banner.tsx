@@ -9,9 +9,11 @@ import { Sparkles, Loader2, ArrowRight } from "lucide-react";
 
 interface DemoSeederBannerProps {
   isEmpty: boolean;
+  title?: string;
+  description?: string;
 }
 
-const DemoSeederBanner = ({ isEmpty }: DemoSeederBannerProps) => {
+const DemoSeederBanner = ({ isEmpty, title, description }: DemoSeederBannerProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -43,11 +45,11 @@ const DemoSeederBanner = ({ isEmpty }: DemoSeederBannerProps) => {
           </div>
           <div className="space-y-1">
             <h3 className="text-xl sm:text-2xl font-bold tracking-tight font-montserrat flex items-center gap-2">
-              Welcome to your Finova Dashboard!
+              {title || "Welcome to your Finova Dashboard!"}
               <Sparkles className="h-5 w-5 text-amber-300 sm:hidden inline" />
             </h3>
             <p className="text-sm text-blue-100/90 leading-relaxed max-w-2xl">
-              It looks like you don&apos;t have any transactions yet. Get started instantly by populating your account with a rich, realistic set of demo transactions, accounts, and categories to see the charts and reports in action.
+              {description || "It looks like you don't have any transactions yet. Get started instantly by populating your account with a rich, realistic set of demo transactions, accounts, and categories to see the charts and reports in action."}
             </p>
           </div>
         </div>

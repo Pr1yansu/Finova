@@ -5,6 +5,7 @@ import { getTransactions } from "@/actions/transactions";
 import { getFinancialAccountByUserId } from "@/actions/financial-account";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "@/data/user";
+import DemoSeederBanner from "@/components/summary/demo-seeder-banner";
 
 interface Props {
   searchParams: {
@@ -40,8 +41,20 @@ const Transactions = async ({ searchParams }: Props) => {
     user?.id as string
   );
 
+  const isEmpty =
+    !searchParams.search &&
+    !searchParams.accountId &&
+    !searchParams.from &&
+    !searchParams.to &&
+    (!data || data.length === 0);
+
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
+      <DemoSeederBanner
+        isEmpty={isEmpty}
+        title="Welcome to your Transactions!"
+        description="It looks like you don't have any transaction records yet. Get started instantly by populating your profile with a rich, realistic set of transactions, accounts, and categories."
+      />
       <Card className="border-none drop-shadow-sm relative">
         <CardHeader className="flex md:flex-row gap-y-2 md:items-center md:justify-between">
           <CardTitle className="line-clamp-1 text-xl">Transactions</CardTitle>
