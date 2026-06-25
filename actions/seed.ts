@@ -2,6 +2,7 @@
 import { currentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { convertAmountToMiliUnits } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 export const seedDemoData = async () => {
   const user = await currentUser();
@@ -203,9 +204,9 @@ export const seedDemoData = async () => {
         // Skip if a transaction with the same amount, payee, and date already exists
         return !existingTransactions.some(
           (existing) =>
-            existing.amount === convertAmountToMiliUnits(t.amount) &&
-            existing.payee === t.payee &&
-            existing.date.getTime() === t.date.getTime()
+              existing.amount === convertAmountToMiliUnits(t.amount) &&
+              existing.payee === t.payee &&
+              existing.date.getTime() === t.date.getTime()
         );
       })
       .map((t) => ({
@@ -222,6 +223,12 @@ export const seedDemoData = async () => {
         data: transactionsToInsert,
       });
     }
+
+    // Purge caches to force page revalidation across all related routes in production
+    revalidatePath("/");
+    revalidatePath("/accounts");
+    revalidatePath("/categories");
+    revalidatePath("/transactions");
 
     return {
       success: "Demo data seeded successfully!",
