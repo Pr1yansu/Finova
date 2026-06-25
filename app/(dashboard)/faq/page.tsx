@@ -43,7 +43,7 @@ const FAQPage = () => {
                 <AccordionItem value="item-2">
                   <AccordionTrigger className="text-left font-medium">How do I create a new transaction?</AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed">
-                    You can create a transaction manually by clicking the "Add Transaction" button on your Transactions page. Simply fill in the date, account, category, payee, amount, and notes. Alternatively, you can upload a bank statement CSV or use our premium OCR receipt scanner to digitize your bills instantly.
+                    You can create a transaction manually by clicking the &quot;Add Transaction&quot; button on your Transactions page. Simply fill in the date, account, category, payee, amount, and notes. Alternatively, you can upload a bank statement CSV or use our premium OCR receipt scanner to digitize your bills instantly.
                   </AccordionContent>
                 </AccordionItem>
                 
@@ -110,7 +110,7 @@ const FAQPage = () => {
                 <AccordionItem value="item-3">
                   <AccordionTrigger className="text-left font-medium">How do I sync my transactions from my bank?</AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed">
-                    Once an account is linked, you can go to the Accounts page, click "Connected Banks", and select your account. This will pull the latest transactions from Plaid, automatically screen out duplicates, and import new records into your dashboard.
+                    Once an account is linked, you can go to the Accounts page, click &quot;Connected Banks&quot;, and select your account. This will pull the latest transactions from Plaid, automatically screen out duplicates, and import new records into your dashboard.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -133,14 +133,14 @@ const FAQPage = () => {
                 <AccordionItem value="item-2">
                   <AccordionTrigger className="text-left font-medium">How does the OCR receipt scanner work?</AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed">
-                    Under the transactions page, VIP members can click the "Scan Receipt" button to upload a photo of a receipt or take a picture using their camera. Our OCR engine extracts the date, payee, amount, and notes, letting you verify the details and save it directly into your transactions log.
+                    Under the transactions page, VIP members can click the &quot;Scan Receipt&quot; button to upload a photo of a receipt or take a picture using their camera. Our OCR engine extracts the date, payee, amount, and notes, letting you verify the details and save it directly into your transactions log.
                   </AccordionContent>
                 </AccordionItem>
                 
                 <AccordionItem value="item-3">
                   <AccordionTrigger className="text-left font-medium">How can I pay for the VIP Pack?</AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed">
-                    We use Razorpay, a secure and trusted Indian payment gateway. You can upgrade instantly using UPI, credit/debit cards, net banking, or wallets by clicking the "Upgrade to VIP" button. Your premium status will be activated immediately upon payment.
+                    We use Razorpay, a secure and trusted Indian payment gateway. You can upgrade instantly using UPI, credit/debit cards, net banking, or wallets by clicking the &quot;Upgrade to VIP&quot; button. Your premium status will be activated immediately upon payment.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
