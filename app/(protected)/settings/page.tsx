@@ -223,7 +223,7 @@ const Settings = () => {
                     name="name"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1">
+                        <FormLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                           Full Name
                         </FormLabel>
                         <FormControl>
