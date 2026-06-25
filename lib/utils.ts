@@ -70,21 +70,31 @@ export const formatDateRange = (period: Period) => {
   const defaultTo = new Date();
   const defaultFrom = subDays(defaultTo, 30);
 
+  if (period.from) {
+    const fromDate = new Date(period.from);
+    if (fromDate.getFullYear() <= 1970) {
+      return "All Time";
+    }
+  }
+
   if (!period.from) {
     return `${format(defaultFrom, "LLL dd")} - ${format(
       defaultTo,
-      "LLL dd,y"
+      "LLL dd, y"
     )}`;
   }
+
+  const fromDate = new Date(period.from);
 
   if (period.to) {
-    return `${format(period.from, "LLL dd")} - ${format(
-      period.to,
-      "LLL dd,y"
+    const toDate = new Date(period.to);
+    return `${format(fromDate, "LLL dd")} - ${format(
+      toDate,
+      "LLL dd, y"
     )}`;
   }
 
-  return `${format(period.from, "LLL dd, y")}`;
+  return `${format(fromDate, "LLL dd, y")}`;
 };
 
 export const formatPercentage = (

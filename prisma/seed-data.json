@@ -9,21 +9,126 @@
         { "name": "Checking", "plaidId": null },
         { "name": "Savings", "plaidId": null }
       ],
-      "categories": [{ "name": "Groceries" }, { "name": "Utilities" }],
+      "categories": [
+        { "name": "Groceries" },
+        { "name": "Utilities" },
+        { "name": "Salary" },
+        { "name": "Rent" },
+        { "name": "Food & Dining" },
+        { "name": "Entertainment" },
+        { "name": "Transportation" },
+        { "name": "Shopping" }
+      ],
       "transactions": [
         {
-          "amount": -5000,
-          "payee": "Grocery Store",
-          "notes": "Weekly groceries",
-          "date": "2025-10-10T00:00:00.000Z",
+          "amount": 150000,
+          "payee": "Tech Corp",
+          "notes": "Monthly Salary",
+          "date": "2026-06-01T09:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 2
+        },
+        {
+          "amount": -35000,
+          "payee": "Grand Meadows Realty",
+          "notes": "Apartment Rent",
+          "date": "2026-06-02T10:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 3
+        },
+        {
+          "amount": -8500,
+          "payee": "Supermart",
+          "notes": "Monthly Groceries",
+          "date": "2026-06-03T14:30:00.000Z",
           "accountIndex": 0,
           "categoryIndex": 0
         },
         {
+          "amount": -4200,
+          "payee": "State Power Corp",
+          "notes": "Electricity Bill",
+          "date": "2026-06-05T11:15:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 1
+        },
+        {
+          "amount": -3500,
+          "payee": "The Olive Garden",
+          "notes": "Dinner with family",
+          "date": "2026-06-07T20:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 4
+        },
+        {
+          "amount": -1800,
+          "payee": "PVR Cinemas",
+          "notes": "Movie tickets & snacks",
+          "date": "2026-06-10T18:45:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 5
+        },
+        {
+          "amount": -2500,
+          "payee": "Shell Fuel Station",
+          "notes": "Car fuel",
+          "date": "2026-06-12T09:30:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 6
+        },
+        {
           "amount": -12000,
-          "payee": "Electric Co",
-          "notes": "Monthly bill",
-          "date": "2025-10-05T00:00:00.000Z",
+          "payee": "Amazon",
+          "notes": "Noise-cancelling headphones",
+          "date": "2026-06-15T13:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 7
+        },
+        {
+          "amount": -6000,
+          "payee": "Fresh Foods",
+          "notes": "Vegetables and dairy",
+          "date": "2026-06-18T16:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 0
+        },
+        {
+          "amount": 25000,
+          "payee": "Upwork Client",
+          "notes": "Freelance Web Design",
+          "date": "2026-06-20T12:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 2
+        },
+        {
+          "amount": -1200,
+          "payee": "Netflix & Spotify",
+          "notes": "Monthly subscriptions",
+          "date": "2026-06-22T08:00:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 5
+        },
+        {
+          "amount": 15000,
+          "payee": "Transfer to Savings",
+          "notes": "Monthly savings goal",
+          "date": "2026-06-23T10:00:00.000Z",
+          "accountIndex": 1,
+          "categoryIndex": 2
+        },
+        {
+          "amount": -950,
+          "payee": "Starbucks Coffee",
+          "notes": "Coffee & cookies",
+          "date": "2026-06-24T15:30:00.000Z",
+          "accountIndex": 0,
+          "categoryIndex": 4
+        },
+        {
+          "amount": -1500,
+          "payee": "Airtel Broadband",
+          "notes": "Wifi internet bill",
+          "date": "2026-06-25T11:00:00.000Z",
           "accountIndex": 0,
           "categoryIndex": 1
         }
@@ -41,7 +146,7 @@
           "amount": 800000,
           "payee": "Employer",
           "notes": "Payroll",
-          "date": "2025-10-01T00:00:00.000Z",
+          "date": "2026-06-01T00:00:00.000Z",
           "accountIndex": 0,
           "categoryIndex": 0
         }

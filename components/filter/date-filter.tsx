@@ -74,6 +74,22 @@ const DateFilter = () => {
             <Button
               size="sm"
               variant="outline"
+              className="w-full"
+              onClick={() => {
+                const today = new Date();
+                const allTimeFrom = new Date("1970-01-01");
+                setDate({ from: allTimeFrom, to: today });
+                replaceUrl({ from: allTimeFrom, to: today });
+              }}
+            >
+              All Time
+            </Button>
+          </PopoverClose>
+          <PopoverClose asChild>
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full"
               disabled={!date?.from || !date?.to}
               onClick={() => {
                 if (!date) return;
@@ -88,6 +104,7 @@ const DateFilter = () => {
             <Button
               size="sm"
               variant="outline"
+              className="w-full"
               disabled={!date?.from || !date?.to}
               onClick={() => {
                 replaceUrl(date);
