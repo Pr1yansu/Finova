@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/db";
-import { getUserById } from "@/data/user";
+import { getUserById, getUserByEmail } from "@/data/user";
 import { Role } from "@prisma/client";
 import { getTwoFactorConfirmationByUserID } from "./data/two-factor-confirmation";
 
@@ -54,9 +54,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true;
     },
     async jwt({ token }) {
-      if (!token.sub) return token;
+      if (!token.sub && !token.email) return token;
 
-      const existingUser = await getUserById(token.sub);
+      let existingUser = null;
+      if (token.sub) {
+        existingUser = await getUserById(token.sub);
+      }
+
+      // Fallback to finding user by email if token.sub is the OAuth provider ID rather than the database User ID
+      if (!existingUser && token.email) {
+        existingUser = await getUserByEmail(token.email);
+      }
 
       if (!existingUser) return token;
 
@@ -68,6 +76,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       token.isOAuth = !!existingUserAccount;
       token.id = existingUser.id as string;
+      token.sub = existingUser.id as string; // Align token.sub with correct database ID
       token.name = existingUser.name;
       token.email = existingUser.email;
       token.role = existingUser.role;
