@@ -52,6 +52,6 @@ export const columns: ColumnDef<FinancialCategory>[] = [
   },
   {
     id: "Actions",
-    cell: ({ row }) => <Actions id={row.original.id} />,
+    cell: ({ row }) => <Actions id={row.original.id} name={row.original.name} />,
   },
 ];

@@ -16,9 +16,10 @@ import { deletefinancialCategoryById } from "@/actions/financial-categories";
 
 interface ActionsProps {
   id: string;
+  name: string;
 }
 
-const Actions = ({ id }: ActionsProps) => {
+const Actions = ({ id, name }: ActionsProps) => {
   const { onOpen } = useOpenCategory();
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
@@ -67,7 +68,7 @@ const Actions = ({ id }: ActionsProps) => {
         <DropdownMenuContent align="end" className="space-y-1">
           <DropdownMenuItem
             onClick={() => {
-              onOpen(id);
+              onOpen(id, name);
             }}
             aria-label="Edit"
             disabled={loading}

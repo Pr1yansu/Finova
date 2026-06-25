@@ -181,21 +181,9 @@ export const bulkDeleteFinancialCategories = async (ids: string[]) => {
 export const getfinancialCategoryById = async (id: string) => {
   const user = await currentUser();
 
-  if (!user) {
+  if (!user || !user.id) {
     return {
       error: "Unauthorized",
-    };
-  }
-
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      id: user.id as string,
-    },
-  });
-
-  if (!existingUser) {
-    return {
-      error: "User not found",
     };
   }
 

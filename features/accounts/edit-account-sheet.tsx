@@ -30,7 +30,7 @@ const EditAccountSheet = () => {
     "You are about to delete an account. This action cannot be undone."
   );
   const [account, setAccount] = React.useState<FinancialAccount | null>(null);
-  const { isOpen, onClose, id } = useOpenAccount();
+  const { isOpen, onClose, id, name } = useOpenAccount();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = React.useState<string | undefined>(undefined);
   const [loading, setLoading] = React.useState(false);
@@ -39,7 +39,12 @@ const EditAccountSheet = () => {
   useEffect(() => {
     const fetchAccount = () => {
       if (!id) return;
-      setLoading(true);
+      if (name) {
+        setAccount({ id, name, userId: "", plaidId: null, createdAt: new Date(), updatedAt: new Date() });
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
       getFinancialAccountById(id)
         .then((response) => {
           if (response) {
@@ -61,7 +66,7 @@ const EditAccountSheet = () => {
     return () => {
       setAccount(null);
     };
-  }, [id, isOpen, onClose]);
+  }, [id, name, isOpen, onClose]);
 
   const onSubmit = (data: FormValues) => {
     setError("");

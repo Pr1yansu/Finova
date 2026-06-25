@@ -33,7 +33,7 @@ const EditCategorySheet = () => {
   const [Category, setCategory] = React.useState<FinancialCategory | null>(
     null
   );
-  const { isOpen, onClose, id } = useOpenCategory();
+  const { isOpen, onClose, id, name } = useOpenCategory();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = React.useState<string | undefined>(undefined);
   const [loading, setLoading] = React.useState(false);
@@ -42,7 +42,12 @@ const EditCategorySheet = () => {
   useEffect(() => {
     const fetchCategory = () => {
       if (!id) return;
-      setLoading(true);
+      if (name) {
+        setCategory({ id, name, userId: "", plaidId: null, createdAt: new Date(), updatedAt: new Date() });
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
       getfinancialCategoryById(id)
         .then((response) => {
           if (response) {
@@ -64,7 +69,7 @@ const EditCategorySheet = () => {
     return () => {
       setCategory(null);
     };
-  }, [id, isOpen, onClose]);
+  }, [id, name, isOpen, onClose]);
 
   const onSubmit = (data: FormValues) => {
     setError("");
