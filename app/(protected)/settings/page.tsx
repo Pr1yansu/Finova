@@ -217,7 +217,7 @@ const Settings = () => {
               
               {/* Profile & Preferences Tab */}
               <TabsContent value="profile" className="space-y-5 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                   <FormField
                     control={form.control}
                     name="name"
@@ -341,7 +341,7 @@ const Settings = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                       <FormField
                         control={form.control}
                         name="password"

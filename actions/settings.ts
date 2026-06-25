@@ -10,6 +10,7 @@ import { sendMail } from "@/lib/mails";
 import { render } from "@react-email/components";
 import VerificationEmail from "@/templates/email-verification-token";
 import { signIn } from "@/auth";
+import { cookies } from "next/headers";
 
 type SettingsKeys = keyof z.infer<typeof SettingsSchema>;
 
@@ -128,13 +129,43 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
 export const getSwitchableAccounts = async () => {
   try {
     const user = await currentUser();
-    if (!user) {
+    if (!user || !user.email) {
       return {
         error: "Unauthorized",
       };
     }
 
+    const cookieStore = cookies();
+
+    // If the current user is a real user (not the pre-seeded demo/admin test accounts),
+    // store their email in a secure cookie so they can switch back to it later.
+    const isTestAccount = user.email === "demo@finova.test" || user.email === "admin@finova.test";
+    if (!isTestAccount) {
+      cookieStore.set("original_user_email", user.email, {
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
+    }
+
+    const originalEmail = cookieStore.get("original_user_email")?.value;
+
+    // We only allow switching between the active user, demo, admin, and their original account.
+    const allowedEmails = new Set<string>();
+    allowedEmails.add(user.email);
+    allowedEmails.add("demo@finova.test");
+    allowedEmails.add("admin@finova.test");
+    if (originalEmail) {
+      allowedEmails.add(originalEmail);
+    }
+
     const accounts = await prisma.user.findMany({
+      where: {
+        email: {
+          in: Array.from(allowedEmails),
+        },
+      },
       select: {
         id: true,
         name: true,
