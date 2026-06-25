@@ -216,7 +216,7 @@ const Settings = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               
               {/* Profile & Preferences Tab */}
-              <TabsContent value="profile" className="space-y-5 focus-visible:outline-none">
+              <TabsContent value="profile" className="space-y-5 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -327,7 +327,7 @@ const Settings = () => {
               </TabsContent>
 
               {/* Security & 2FA Tab */}
-              <TabsContent value="security" className="space-y-5 focus-visible:outline-none">
+              <TabsContent value="security" className="space-y-5 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none">
                 {user?.isOAuth ? (
                   <div className="p-6 rounded-xl border border-dashed border-gray-200 bg-gray-50/50 text-center">
                     <p className="text-sm text-gray-500">
@@ -411,7 +411,7 @@ const Settings = () => {
               </TabsContent>
 
               {/* Quick Switch Tab */}
-              <TabsContent value="switch" className="space-y-5 focus-visible:outline-none">
+              <TabsContent value="switch" className="space-y-5 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none">
                 <div className="space-y-1">
                   <h3 className="text-sm font-bold text-gray-800">Developer Quick-Switch Panel</h3>
                   <p className="text-xs text-gray-500 leading-normal">
