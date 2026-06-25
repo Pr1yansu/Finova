@@ -192,7 +192,7 @@ const Settings = () => {
             <FormSuccess message={success} />
             <div className="flex items-center justify-end gap-2 pt-2">
               <Button
-                type="submit"
+                type="button"
                 disabled={isPending}
                 variant="destructive"
                 onClick={async () => {
@@ -201,7 +201,7 @@ const Settings = () => {
               >
                 Sign out
               </Button>
-              <Button type="submit" variant={"outline"} disabled={isPending}>
+              <Button type="submit" variant="default" disabled={isPending}>
                 Submit
               </Button>
             </div>
@@ -209,7 +209,7 @@ const Settings = () => {
         </Form>
       </CardContent>
       <CardFooter>
-        <div className="flex flex-col items-center justify-center space-y-2 text-sm text-gray-500 w-full">
+        <div className="flex flex-col items-center justify-center space-y-3 text-sm text-gray-500 w-full">
           <div>
             Go back to{" "}
             <Link
@@ -219,8 +219,17 @@ const Settings = () => {
               Dashboard
             </Link>
           </div>
-          <div className="flex items-center justify-center text-sm text-gray-500">
-            © 2021 All rights reserved.
+          <div className="flex gap-x-4 text-xs font-medium text-gray-400">
+            <Link href="/faq" className="hover:underline hover:text-blue-500">
+              FAQ
+            </Link>
+            <span>•</span>
+            <Link href="/terms" className="hover:underline hover:text-blue-500">
+              Terms & Conditions
+            </Link>
+          </div>
+          <div className="flex items-center justify-center text-xs text-gray-400">
+            © 2026 Finova. All rights reserved.
           </div>
         </div>
       </CardFooter>
