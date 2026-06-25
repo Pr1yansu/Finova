@@ -17,59 +17,59 @@ const fetchFinancialData = async (
   endDate: Date,
   accountId?: string
 ) => {
-  const incomeResult = await prisma.transactions.aggregate({
-    _sum: {
-      amount: true,
-    },
-    where: {
-      financialAccount: {
-        userId: userId,
+  const [incomeResult, expensesResult, remainingResult] = await Promise.all([
+    prisma.transactions.aggregate({
+      _sum: {
+        amount: true,
       },
-      date: {
-        gte: startDate,
-        lte: endDate,
+      where: {
+        financialAccount: {
+          userId: userId,
+        },
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+        amount: {
+          gte: 0,
+        },
+        ...(accountId && { financialAccountId: accountId }),
       },
-      amount: {
-        gte: 0,
+    }),
+    prisma.transactions.aggregate({
+      _sum: {
+        amount: true,
       },
-      ...(accountId && { financialAccountId: accountId }),
-    },
-  });
-
-  const expensesResult = await prisma.transactions.aggregate({
-    _sum: {
-      amount: true,
-    },
-    where: {
-      financialAccount: {
-        userId: userId,
+      where: {
+        financialAccount: {
+          userId: userId,
+        },
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+        amount: {
+          lt: 0,
+        },
+        ...(accountId && { financialAccountId: accountId }),
       },
-      date: {
-        gte: startDate,
-        lte: endDate,
+    }),
+    prisma.transactions.aggregate({
+      _sum: {
+        amount: true,
       },
-      amount: {
-        lt: 0,
+      where: {
+        financialAccount: {
+          userId: userId,
+        },
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+        ...(accountId && { financialAccountId: accountId }),
       },
-      ...(accountId && { financialAccountId: accountId }),
-    },
-  });
-
-  const remainingResult = await prisma.transactions.aggregate({
-    _sum: {
-      amount: true,
-    },
-    where: {
-      financialAccount: {
-        userId: userId,
-      },
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-      ...(accountId && { financialAccountId: accountId }),
-    },
-  });
+    }),
+  ]);
 
   return {
     income: incomeResult._sum?.amount || 0,
@@ -116,18 +116,91 @@ export const getSummary = async (filters: filterFields) => {
 
   const lastPeriodEnd = subDays(endDate, periodLength);
 
-  const currentPeriod = await fetchFinancialData(
-    user.id as string,
-    startDate,
-    endDate,
-    accountId
-  );
-  const lastPeriod = await fetchFinancialData(
-    user.id as string,
-    lastPeriodStart,
-    lastPeriodEnd,
-    accountId
-  );
+  // Execute all major database queries in parallel to drastically reduce latencies
+  const [
+    currentPeriod,
+    lastPeriod,
+    categoryData,
+    activeDaysIncome,
+    activeDaysExpenses,
+    categories,
+  ] = await Promise.all([
+    fetchFinancialData(user.id as string, startDate, endDate, accountId),
+    fetchFinancialData(user.id as string, lastPeriodStart, lastPeriodEnd, accountId),
+    prisma.transactions.groupBy({
+      by: ["categoryId"],
+      _sum: {
+        amount: true,
+      },
+      where: {
+        financialAccount: {
+          userId: user.id as string,
+        },
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+        amount: {
+          lt: 0,
+        },
+        ...(accountId && { financialAccountId: accountId }),
+      },
+      orderBy: {
+        _sum: {
+          amount: "asc",
+        },
+      },
+    }),
+    prisma.transactions.groupBy({
+      by: ["date"],
+      _sum: {
+        amount: true,
+      },
+      where: {
+        financialAccount: {
+          userId: user.id as string,
+        },
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+        amount: {
+          gte: 0,
+        },
+        ...(accountId && { financialAccountId: accountId }),
+      },
+      orderBy: {
+        date: "asc",
+      },
+    }),
+    prisma.transactions.groupBy({
+      by: ["date"],
+      _sum: {
+        amount: true,
+      },
+      where: {
+        financialAccount: {
+          userId: user.id as string,
+        },
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+        amount: {
+          lt: 0,
+        },
+        ...(accountId && { financialAccountId: accountId }),
+      },
+      orderBy: {
+        date: "asc",
+      },
+    }),
+    prisma.financialCategory.findMany({
+      where: {
+        userId: user.id as string,
+      },
+    }),
+  ]);
 
   const incomeChange = calculatePercentageChange(
     lastPeriod.income,
@@ -144,49 +217,12 @@ export const getSummary = async (filters: filterFields) => {
     currentPeriod.remaining
   );
 
-  const categoryData = await prisma.transactions.groupBy({
-    by: ["categoryId"],
-    _sum: {
-      amount: true,
-    },
-    where: {
-      financialAccount: {
-        userId: user.id as string,
-      },
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-      amount: {
-        lt: 0,
-      },
-      ...(accountId && { financialAccountId: accountId }),
-    },
-    orderBy: {
-      _sum: {
-        amount: "asc",
-      },
-    },
-  });
-
-  const categoryIds = categoryData
-    .map((item) => item.categoryId)
-    .filter(Boolean) as string[];
-
-  const categories = await prisma.financialCategory.findMany({
-    where: {
-      id: {
-        in: categoryIds,
-      },
-    },
-  });
-
   const categoriesWithSum = categoryData.map((item) => {
     const category = categories.find((cat) => cat.id === item.categoryId);
     return {
       name: category?.name || "Unknown",
       value: Math.abs(item._sum.amount || 0),
-      color: getColorForCategory(),
+      color: getColorForCategory(category?.name || "Unknown"),
     };
   });
 
@@ -202,52 +238,6 @@ export const getSummary = async (filters: filterFields) => {
       color: getColorForCategory("Other"),
     });
   }
-
-  const activeDaysIncome = await prisma.transactions.groupBy({
-    by: ["date"],
-    _sum: {
-      amount: true,
-    },
-    where: {
-      financialAccount: {
-        userId: user.id as string,
-      },
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-      amount: {
-        gte: 0,
-      },
-      ...(accountId && { financialAccountId: accountId }),
-    },
-    orderBy: {
-      date: "asc",
-    },
-  });
-
-  const activeDaysExpenses = await prisma.transactions.groupBy({
-    by: ["date"],
-    _sum: {
-      amount: true,
-    },
-    where: {
-      financialAccount: {
-        userId: user.id as string,
-      },
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-      amount: {
-        lt: 0,
-      },
-      ...(accountId && { financialAccountId: accountId }),
-    },
-    orderBy: {
-      date: "asc",
-    },
-  });
 
   const activeDays = activeDaysIncome.map((incomeItem) => {
     return {

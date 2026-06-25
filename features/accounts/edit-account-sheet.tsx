@@ -47,7 +47,6 @@ const EditAccountSheet = () => {
               toast.error(response.error);
             } else if (response.data) {
               setAccount(response.data);
-              toast.success(`Account found: ${response.data.name}`);
             }
           }
         })
@@ -55,10 +54,7 @@ const EditAccountSheet = () => {
           toast.error("An error occurred");
         })
         .finally(() => {
-          setTimeout(() => {
-            toast.dismiss();
-            setLoading(false);
-          }, 2000);
+          setLoading(false);
         });
     };
     fetchAccount();

@@ -8,10 +8,13 @@ import ModalProvider from "@/providers/modal-provider";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await currentUser();
-  const { data: financialAccount, error: financialAccountError } =
-    await getFinancialAccountByUserId(user?.id as string);
-  const { data: financialCategories, error: financialCategoriesError } =
-    await getFinancialCategoriesByUserId(user?.id as string);
+  const [
+    { data: financialAccount, error: financialAccountError },
+    { data: financialCategories, error: financialCategoriesError }
+  ] = await Promise.all([
+    getFinancialAccountByUserId(user?.id as string),
+    getFinancialCategoriesByUserId(user?.id as string)
+  ]);
   return (
     <div>
       <SheetProvider

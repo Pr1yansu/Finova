@@ -20,26 +20,26 @@ const Transactions = async ({ searchParams }: Props) => {
   const search = searchParams.search;
   const user = await currentUser();
 
-  const dbUser = await getUserById(user?.id as string);
-
-  const { data, error } = await getTransactions({
-    search,
-    accountId: searchParams.accountId,
-    from: searchParams.from,
-    to: searchParams.to,
-  });
-
   if (!user || !user?.id) {
-    <div className="flex items-center justify-center h-full w-full text-center">
-      <h4 className="text-lg font-semibold text-gray-500">
-        You need to be logged in to view this page
-      </h4>
-    </div>;
+    return (
+      <div className="flex items-center justify-center h-full w-full text-center">
+        <h4 className="text-lg font-semibold text-gray-500">
+          You need to be logged in to view this page
+        </h4>
+      </div>
+    );
   }
 
-  const { data: accounts } = await getFinancialAccountByUserId(
-    user?.id as string
-  );
+  const [dbUser, { data, error }, { data: accounts }] = await Promise.all([
+    getUserById(user.id),
+    getTransactions({
+      search,
+      accountId: searchParams.accountId,
+      from: searchParams.from,
+      to: searchParams.to,
+    }),
+    getFinancialAccountByUserId(user.id),
+  ]);
 
   const isEmpty =
     !searchParams.search &&

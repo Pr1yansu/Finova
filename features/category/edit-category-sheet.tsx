@@ -50,7 +50,6 @@ const EditCategorySheet = () => {
               toast.error(response.error);
             } else if (response.data) {
               setCategory(response.data);
-              toast.success(`Category found: ${response.data.name}`);
             }
           }
         })
@@ -58,10 +57,7 @@ const EditCategorySheet = () => {
           toast.error("An error occurred");
         })
         .finally(() => {
-          setTimeout(() => {
-            toast.dismiss();
-            setLoading(false);
-          }, 2000);
+          setLoading(false);
         });
     };
     fetchCategory();

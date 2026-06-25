@@ -30,9 +30,10 @@ const Accounts = async ({ searchParams }: Props) => {
     );
   }
 
-  const dbUser = await getUserById(user?.id as string);
-
-  const { data, error } = await getFinancialAccounts(searchParams.search || "");
+  const [dbUser, { data, error }] = await Promise.all([
+    getUserById(user.id),
+    getFinancialAccounts(searchParams.search || "")
+  ]);
   const isEmpty = !searchParams.search && (!data || data.length === 0);
 
   return (
