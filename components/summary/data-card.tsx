@@ -48,6 +48,8 @@ interface DataCardProps extends BoxVariants, IconVariants {
   dateRange: string;
   percentageChange?: number;
   icon: IconType;
+  isPercentage?: boolean;
+  customSubtext?: string;
 }
 
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -59,10 +61,29 @@ const DataCard = ({
   percentageChange = 0,
   variant,
   icon: Icon,
+  isPercentage = false,
+  customSubtext,
 }: DataCardProps) => {
   const user = useCurrentUser();
   const currency = user?.defaultCurrency || "INR";
-  const currencyFormatter = (val: number) => formatCurrency(val, currency);
+  
+  const currencyFormatter = (val: number) => {
+    if (isPercentage) {
+      return `${val.toFixed(2)}%`;
+    }
+    return formatCurrency(val, currency);
+  };
+
+  // Dynamically resolve text styling based on custom subtext intent
+  const getSubtextColor = () => {
+    if (customSubtext) {
+      if (variant === "success") return "text-emerald-500 font-medium";
+      if (variant === "danger") return "text-destructive font-medium";
+      if (variant === "warning") return "text-yellow-600 font-medium";
+      return "text-muted-foreground";
+    }
+    return percentageChange > 0 ? "text-emerald-500 font-medium" : "text-destructive font-medium";
+  };
 
   return (
     <Card>
@@ -87,13 +108,8 @@ const DataCard = ({
             formattingFn={currencyFormatter}
           />
         </h1>
-        <p
-          className={cn(
-            "text-muted-foreground text-sm line-clamp-1",
-            percentageChange > 0 ? "text-emerald-500" : "text-destructive"
-          )}
-        >
-          {formatPercentage(percentageChange)} from last period
+        <p className={cn("text-sm line-clamp-1", getSubtextColor())}>
+          {customSubtext || `${formatPercentage(percentageChange)} from last period`}
         </p>
       </CardContent>
     </Card>

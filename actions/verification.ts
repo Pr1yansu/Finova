@@ -18,7 +18,22 @@ export const verifyEmail = async (token: string) => {
     };
   }
 
-  const user = await getUserByEmail(verificationToken.email);
+  // Parse composite token (userId/newEmail) if this is an email change request
+  const isEmailChange = verificationToken.email.includes("/");
+  let user = null;
+  let targetEmail = verificationToken.email;
+
+  if (isEmailChange) {
+    const [userId, newEmail] = verificationToken.email.split("/");
+    user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    targetEmail = newEmail;
+  } else {
+    user = await getUserByEmail(verificationToken.email);
+  }
 
   if (!user) {
     return {
@@ -32,7 +47,7 @@ export const verifyEmail = async (token: string) => {
     },
     data: {
       emailVerified: new Date(),
-      email: verificationToken.email,
+      email: targetEmail,
     },
   });
 

@@ -59,7 +59,10 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
         };
       }
 
-      const verificationToken = await generateVerificationToken(values.email);
+      // Generate composite token: prefix with user ID to support secure email changes
+      const verificationToken = await generateVerificationToken(
+        `${user.id}/${values.email}`
+      );
 
       const template = await render(
         VerificationEmail({ verificationToken: verificationToken.token })

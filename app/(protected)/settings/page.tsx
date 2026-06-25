@@ -250,6 +250,11 @@ const Settings = () => {
                         <FormControl>
                           <Input {...field} disabled={isPending || user?.isOAuth} type="email" className="h-10 border-gray-200 focus-visible:ring-blue-500 rounded-lg bg-white disabled:bg-gray-50 disabled:text-gray-400" />
                         </FormControl>
+                        {user?.isOAuth && (
+                          <FormDescription className="text-[10px] text-gray-400">
+                            Email address is managed by your social provider and cannot be modified.
+                          </FormDescription>
+                        )}
                         <FormMessage className="text-xs" />
                       </FormItem>
                     )}
