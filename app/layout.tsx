@@ -4,6 +4,7 @@ import { Nunito, Montserrat } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import Payment from "@/components/payment";
+import UserTracker from "@/components/user-tracker";
 
 const nunito = Nunito({
   weight: ["1000", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -31,6 +32,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <SessionProvider>
         <Payment />
+        <UserTracker />
         <body
           className={`${nunito.variable} ${montserrat.variable} antialiased`}
         >

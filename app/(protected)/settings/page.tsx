@@ -418,9 +418,9 @@ const Settings = () => {
               {/* Quick Switch Tab */}
               <TabsContent value="switch" className="space-y-5 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none">
                 <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-gray-800">Developer Quick-Switch Panel</h3>
+                  <h3 className="text-sm font-bold text-gray-800">Account Switcher</h3>
                   <p className="text-xs text-gray-500 leading-normal">
-                    Instantly switch between database profiles. Swap sessions to test dashboard metrics, permissions, and transactions.
+                    Instantly switch between accounts that have previously logged in on this device.
                   </p>
                 </div>
 
@@ -489,6 +489,14 @@ const Settings = () => {
                     );
                   })}
                 </div>
+
+                {accounts.length <= 1 && (
+                  <div className="p-6 rounded-xl border border-dashed border-gray-200 bg-gray-50/50 text-center">
+                    <p className="text-xs text-gray-500 leading-normal">
+                      No other accounts recorded on this device. Sign in with another account first to enable quick switching.
+                    </p>
+                  </div>
+                )}
               </TabsContent>
 
               <FormError message={error} />

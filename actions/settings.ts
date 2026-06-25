@@ -136,34 +136,27 @@ export const getSwitchableAccounts = async () => {
     }
 
     const cookieStore = cookies();
+    const deviceEmailsCookie = cookieStore.get("finova_device_emails")?.value || "";
 
-    // If the current user is a real user (not the pre-seeded demo/admin test accounts),
-    // store their email in a secure cookie so they can switch back to it later.
-    const isTestAccount = user.email === "demo@finova.test" || user.email === "admin@finova.test";
-    if (!isTestAccount) {
-      cookieStore.set("original_user_email", user.email, {
+    const emailsList = deviceEmailsCookie
+      ? deviceEmailsCookie.split(",").map((e) => e.trim()).filter(Boolean)
+      : [];
+
+    // Ensure the current user's email is recorded in the device list
+    if (!emailsList.includes(user.email)) {
+      emailsList.push(user.email);
+      cookieStore.set("finova_device_emails", emailsList.join(","), {
         path: "/",
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
-        maxAge: 60 * 60 * 24 * 30, // 30 days
+        maxAge: 60 * 60 * 24 * 365, // 1 year
       });
-    }
-
-    const originalEmail = cookieStore.get("original_user_email")?.value;
-
-    // We only allow switching between the active user, demo, admin, and their original account.
-    const allowedEmails = new Set<string>();
-    allowedEmails.add(user.email);
-    allowedEmails.add("demo@finova.test");
-    allowedEmails.add("admin@finova.test");
-    if (originalEmail) {
-      allowedEmails.add(originalEmail);
     }
 
     const accounts = await prisma.user.findMany({
       where: {
         email: {
-          in: Array.from(allowedEmails),
+          in: emailsList,
         },
       },
       select: {
