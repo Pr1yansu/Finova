@@ -1,4 +1,4 @@
-export const publicRoutes = ["/auth/verify"];
+export const publicRoutes = ["/auth/verify", "/api/ping"];
 export const authRoutes = [
   "/auth/login",
   "/auth/register",
